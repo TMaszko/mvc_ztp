@@ -1,33 +1,27 @@
 package com.company.Model;
 
-import com.company.DAO.OrderHeaderDAO;
-import com.company.DAO.OrderHeaderDAOImpl;
+import com.company.DAO.FakturaDAO;
+import com.company.DAO.FakturaDAOImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.stream.Collectors;
 
 public class Model extends Observable implements Observer  {
 
-    private List<OrderHeader> orderHeaderList;
-    private OrderHeaderDAO orderHeaderDAO;
+    private List<Faktura> fakturaList;
+    private FakturaDAO fakturaDAO;
 
     public Model() throws SQLException, ClassNotFoundException {
-        orderHeaderDAO = new OrderHeaderDAOImpl();
-        orderHeaderList = getOrderHeadersFromDatabase();
+        fakturaDAO = new FakturaDAOImpl();
+        fakturaList = getFakturyFromDatabase();
     }
 
-    private List<OrderHeader> getOrderHeadersFromDatabase() throws SQLException {
-        return orderHeaderDAO.getAllOrderHeaders();
-    }
-
-    public void changeOrderDate(int index, LocalDate date) throws SQLException {
-        OrderHeader orderHeader = orderHeaderList.get(index);
-        orderHeader.setOrderDate(date);
-        orderHeaderDAO.changeDate(orderHeader.getId(), date);
+    private List<Faktura> getFakturyFromDatabase() throws SQLException {
+        return fakturaDAO.getAllFaktura();
     }
 
     @Override
@@ -36,25 +30,24 @@ public class Model extends Observable implements Observer  {
         notifyObservers();
     }
 
-    public void addNewOrder() throws SQLException, ClassNotFoundException {
-        OrderHeader orderHeader = new OrderHeader(getNextId());
-        orderHeaderList.add(orderHeader);
-        orderHeaderDAO.addOrderHeader(orderHeader.getId(), LocalDate.now());
+    public void addNewFaktura() throws SQLException, ClassNotFoundException {
+        Faktura faktura = new Faktura(getNextId());
+        fakturaList.add(faktura);
+        fakturaDAO.addFaktura(faktura.getId(), LocalDate.now());
         setChanged();
         notifyObservers();
     }
 
     private int getNextId() {
-        return orderHeaderList.stream().map(OrderHeader::getId).mapToInt(v -> v).max().orElse(-1) + 1;
+        return fakturaList.stream().map(Faktura::getId).mapToInt(v -> v).max().orElse(-1) + 1;
     }
 
-    public void removeOrder(int index){
-        orderHeaderList.remove(index);
+    public void removeFaktura(int index){
+        fakturaList = fakturaList.stream().filter(v -> v.getId() != index).collect(Collectors.toList());
 
     }
 
-    public List<OrderHeader> getOrderList() {
-//      orderHeaderList = getOrderHeadersFromDatabase();   -> za kazdym razem pobieramy od nowa z bazy
-        return orderHeaderList;
+    public List<Faktura> getFakturaList() {
+        return fakturaList;
     }
 }

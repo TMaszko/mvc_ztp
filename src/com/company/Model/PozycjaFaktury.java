@@ -1,28 +1,28 @@
 package com.company.Model;
 
-import com.company.DAO.OrderDetailDAO;
-import com.company.DAO.OrderDetailDAOImpl;
+import com.company.DAO.PozycjaFakturyDAO;
+import com.company.DAO.PozycjaFakturyDAOImpl;
 
 import java.sql.SQLException;
 import java.util.Observable;
 
-public class OrderDetail extends Observable{
+public class PozycjaFaktury extends Observable{
 
     private int id;
-    private int orderHeaderID;
+    private int fakturaID;
     private String productName;
     private float price;
 
-    public OrderDetail(int id, int orderHeaderID, String productName, float price){
+    public PozycjaFaktury(int id, int fakturaID, String productName, float price){
         this.id = id;
-        this.orderHeaderID = orderHeaderID;
+        this.fakturaID = fakturaID;
         this.productName = productName;
         this.price = price;
     }
 
-    public OrderDetail(int id, int orderHeaderID) {
+    public PozycjaFaktury(int id, int fakturaID) {
         this.id = id;
-        this.orderHeaderID = orderHeaderID;
+        this.fakturaID = fakturaID;
     }
 
     public int getId() {
@@ -33,12 +33,12 @@ public class OrderDetail extends Observable{
         this.id = id;
     }
 
-    public int getOrderHeaderID() {
-        return orderHeaderID;
+    public int getFakturaID() {
+        return fakturaID;
     }
 
-    public void setOrderHeaderID(int orderHeaderID) {
-        this.orderHeaderID = orderHeaderID;
+    public void setFakturaID(int fakturaID) {
+        this.fakturaID = fakturaID;
     }
 
     public String getProductName() {
@@ -46,9 +46,9 @@ public class OrderDetail extends Observable{
     }
 
     public void setProductName(String productName) throws SQLException, ClassNotFoundException {
-        OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+        PozycjaFakturyDAO pozycjaFakturyDAO = new PozycjaFakturyDAOImpl();
         this.productName = productName;
-       orderDetailDAO.setProductName(getOrderHeaderID(), getId(), productName);
+       pozycjaFakturyDAO.setProductName(getFakturaID(), getId(), productName);
         setChanged();
         notifyObservers();
     }
@@ -58,21 +58,21 @@ public class OrderDetail extends Observable{
     }
 
     public void setPrice(float price) throws SQLException, ClassNotFoundException {
-        OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+        PozycjaFakturyDAO pozycjaFakturyDAO = new PozycjaFakturyDAOImpl();
         this.price = price;
-        orderDetailDAO.setPrice(orderHeaderID, id, price);
+        pozycjaFakturyDAO.setPrice(fakturaID, id, price);
         setChanged();
         notifyObservers();
     }
 
     @Override
     public String toString() {
-        return "Id pozycji zamowienia: " + id + " Nazwa towaru: " + productName + " koszt: " + price;
+        return "Id pozycji faktury: " + id + " Nazwa towaru: " + productName + " koszt: " + price;
     }
 
     public void remove() throws SQLException, ClassNotFoundException {
-        OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
-        orderDetailDAO.removeOrderDetail(orderHeaderID, id);
+        PozycjaFakturyDAO pozycjaFakturyDAO = new PozycjaFakturyDAOImpl();
+        pozycjaFakturyDAO.removePozycjaFaktury(fakturaID, id);
         setChanged();
         notifyObservers(id);
     }

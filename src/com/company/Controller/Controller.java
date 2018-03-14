@@ -1,19 +1,20 @@
 package com.company.Controller;
 
 import com.company.Model.Model;
-import com.company.Model.OrderHeader;
-import com.company.View.OrderView;
+import com.company.Model.Faktura;
+import com.company.View.FakturaView;
 import com.company.View.View;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDate.now;
 
 public class Controller {
 
-    Model model;
-    View view;
+    private Model model;
+    private View view;
 
     public Controller(Model model){
         this.model = model;
@@ -21,32 +22,31 @@ public class Controller {
 
     public boolean execute(String command) throws SQLException, ClassNotFoundException {
         if ("add".equals(command)) {
-            model.addNewOrder();
+            model.addNewFaktura();
             return true;
         }
-        if (isInteger(command) && isOrderNumber(Integer.parseInt(command))) {
-            showOrder(Integer.parseInt(command));
+        if (isInteger(command) && isFakturaNumber(Integer.parseInt(command))) {
+            showFaktura(Integer.parseInt(command));
             return true;
         }
         return false;
     }
 
-    private void showOrder(int i) {
-        OrderHeader orderHeaderModel = model.getOrderList().get(i);
+    private void showFaktura(int i) {
+        Faktura fakturaModel = model.getFakturaList().stream().filter(v -> v.getId() == i).findFirst().orElseThrow(NoSuchElementException::new);
+        FakturaController controller = new FakturaController(fakturaModel);
+        FakturaView fakturaView = new FakturaView(fakturaModel,controller);
+        fakturaModel.addObserver(view);
+        controller.setView(fakturaView);
 
-        OrderHeaderController controller = new OrderHeaderController(orderHeaderModel);
-        OrderView orderView = new OrderView(orderHeaderModel,controller);
-        orderHeaderModel.addObserver(view);
-        controller.setView(orderView);
-
-        orderView.show();
+        fakturaView.show();
     }
     public void setView(View view){
         this.view = view;
     }
 
-    private boolean isOrderNumber(int command) {
-        return 0 <= command && command < model.getOrderList().size();
+    private boolean isFakturaNumber(int command) {
+        return model.getFakturaList().stream().filter(v -> v.getId() == command).collect(Collectors.toList()).size() == 1;
     }
 
     public static boolean isInteger(String s) {

@@ -1,22 +1,22 @@
 package com.company.Controller;
 
-import com.company.Model.OrderDetail;
-import com.company.View.OrderDetailView;
+import com.company.Model.PozycjaFaktury;
+import com.company.View.PozFakturyView;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class OrderDetailController {
+public class PozFakturyController {
 
-    OrderDetail model;
-    OrderDetailView view;
+    PozycjaFaktury model;
+    PozFakturyView view;
 
-    public OrderDetailController(OrderDetail orderDetailModel) {
-        this.model = orderDetailModel;
+    public PozFakturyController(PozycjaFaktury pozycjaFakturyModel) {
+        this.model = pozycjaFakturyModel;
     }
 
-    public void setView(OrderDetailView orderView) {
-        this.view = orderView;
+    public void setView(PozFakturyView pozFakturyView) {
+        this.view = pozFakturyView;
     }
 
     public boolean execute(String command) throws SQLException, ClassNotFoundException {
@@ -51,7 +51,7 @@ public class OrderDetailController {
     private void changeName() {
         try (Scanner scanner = new Scanner(System.in)) {
             String name;
-            System.out.println("Podaj nazwe produktu: ");
+            System.out.println("Podaj nazwe produktu : ");
             name = scanner.nextLine();
             model.setProductName(name);
         } catch (SQLException e) {

@@ -1,8 +1,8 @@
 package com.company.View;
 
 import com.company.Controller.Controller;
+import com.company.Model.Faktura;
 import com.company.Model.Model;
-import com.company.Model.OrderHeader;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.Observer;
 import java.util.Scanner;
 
 public class View implements Observer{
-    Model model;
-    Controller controller;
+    private Model model;
+    private Controller controller;
 
 
     public View(Model model, Controller controller) {
@@ -31,9 +31,9 @@ public class View implements Observer{
     }
 
     private void show(Model model) {
-        List <OrderHeader> orderHeaderList = model.getOrderList();
-        for (OrderHeader orderHeader: orderHeaderList) {
-            System.out.println(orderHeader);
+        List <Faktura> fakturaList = model.getFakturaList();
+        for (Faktura faktura : fakturaList) {
+            System.out.println(faktura);
         }
     }
 
@@ -41,7 +41,7 @@ public class View implements Observer{
         try (Scanner scanner = new Scanner(System.in)) {
             String command;
             do {
-                System.out.println("Podaj nr zamowienia lub wpisz 'add' jeśli chcesz dodać nowe zamówienie");
+                System.out.println("Podaj nr faktury lub wpisz 'add' jeśli chcesz dodać nową fakturę");
                 command = scanner.nextLine();
             } while (!controller.execute(command));
         } catch (SQLException e) {
@@ -54,7 +54,7 @@ public class View implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer){
-            model.removeOrder((int) arg);
+            model.removeFaktura((int) arg);
         }
         show();
     }
