@@ -7,10 +7,7 @@ import com.company.DAO.OrderHeaderDAOImpl;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class OrderHeader extends Observable{
 
@@ -53,8 +50,9 @@ public class OrderHeader extends Observable{
         return orderDate;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
+    public void setOrderDate(LocalDate orderDate) throws SQLException {
         this.orderDate = orderDate;
+        orderHeaderDAO.changeDate(id, orderDate);
         setChanged();
         notifyObservers();
     }
@@ -90,7 +88,7 @@ public class OrderHeader extends Observable{
     }
 
     private int getNextId() {
-        return orderDetailList.size();
+        return orderDetailList.stream().map(OrderDetail::getId).mapToInt(v -> v).max().orElse(-1) + 1;
     }
 
     public void removeOrderDetail(int arg) throws SQLException, ClassNotFoundException {

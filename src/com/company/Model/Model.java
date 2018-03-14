@@ -6,6 +6,7 @@ import com.company.DAO.OrderHeaderDAOImpl;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -44,7 +45,7 @@ public class Model extends Observable implements Observer  {
     }
 
     private int getNextId() {
-        return orderHeaderList.size();
+        return orderHeaderList.stream().map(OrderHeader::getId).mapToInt(v -> v).max().orElse(-1) + 1;
     }
 
     public void removeOrder(int index){
