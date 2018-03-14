@@ -3,6 +3,7 @@ package com.company.View;
 import com.company.Controller.OrderDetailController;
 import com.company.Model.OrderDetail;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class OrderDetailView {
@@ -31,6 +32,10 @@ public class OrderDetailView {
             do {
                 command = scanner.nextLine();
             } while (!controller.execute(command));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

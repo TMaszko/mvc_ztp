@@ -5,6 +5,7 @@ import com.company.Model.OrderHeader;
 import com.company.View.OrderView;
 import com.company.View.View;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 import static java.time.LocalDate.now;
@@ -18,7 +19,7 @@ public class Controller {
         this.model = model;
     }
 
-    public boolean execute(String command) {
+    public boolean execute(String command) throws SQLException, ClassNotFoundException {
         if ("add".equals(command)) {
             model.addNewOrder();
             return true;

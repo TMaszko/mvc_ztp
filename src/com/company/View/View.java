@@ -4,6 +4,7 @@ import com.company.Controller.Controller;
 import com.company.Model.Model;
 import com.company.Model.OrderHeader;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -43,6 +44,10 @@ public class View implements Observer{
                 System.out.println("Podaj nr zamowienia lub wpisz 'add' jeśli chcesz dodać nowe zamówienie");
                 command = scanner.nextLine();
             } while (!controller.execute(command));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+
         }
     }
 

@@ -6,6 +6,7 @@ import com.company.Model.Model;
 import com.company.Model.OrderDetail;
 import com.company.Model.OrderHeader;
 
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -46,13 +47,23 @@ public class OrderView implements Observer {
             do {
                 command = scanner.nextLine();
             } while (!controller.execute(command));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Integer){
-            model.removeOrderDetail((int) arg);
+            try {
+                model.removeOrderDetail((int) arg);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         show();
     }

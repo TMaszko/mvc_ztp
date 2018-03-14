@@ -1,5 +1,11 @@
 package com.company.Model;
 
+import com.company.DAO.OrderDetailDAO;
+import com.company.DAO.OrderDetailDAOImpl;
+import com.company.DAO.OrderHeaderDAO;
+import com.company.DAO.OrderHeaderDAOImpl;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,21 +17,28 @@ public class OrderHeader extends Observable{
     private int id;
     private LocalDate orderDate;
     private List<OrderDetail> orderDetailList;
+    private OrderHeaderDAO orderHeaderDAO;
 
-    OrderHeader(int id, LocalDate orderDate, List<OrderDetail> orderDetailList){
+    public OrderHeader(int id, LocalDate orderDate, List<OrderDetail> orderDetailList) throws SQLException, ClassNotFoundException {
         this.id = id;
         this.orderDate = orderDate;
         this.orderDetailList = orderDetailList;
+        orderHeaderDAO = new OrderHeaderDAOImpl();
     }
 
-    OrderHeader(int id, LocalDate orderDate){
+    public OrderHeader(int id, LocalDate orderDate) throws SQLException, ClassNotFoundException {
         this.id = id;
         this.orderDetailList = new ArrayList<>();
+        this.orderDate = orderDate;
+        orderHeaderDAO = new OrderHeaderDAOImpl();
+
     }
 
-    public OrderHeader(int id) {
+    public OrderHeader(int id) throws SQLException, ClassNotFoundException {
         this.id = id;
         this.orderDetailList = new ArrayList<>();
+        this.orderDate = LocalDate.now();
+        orderHeaderDAO = new OrderHeaderDAOImpl();
     }
 
     public int getId() {
@@ -50,12 +63,14 @@ public class OrderHeader extends Observable{
         return orderDetailList;
     }
 
-    public void setOrderDetailList(List<OrderDetail> orderDetailList) {
+    public void setOrderDetailList(List<OrderDetail> orderDetailList) throws SQLException {
         this.orderDetailList = orderDetailList;
+        orderHeaderDAO.setOrderDetailList(id, orderDetailList);
     }
 
-    public void removeOrder() {
+    public void removeOrder() throws SQLException {
         //Usunac z bazy + wszystkie orderdetails ktore do niego nalezą
+        orderHeaderDAO.removeOrder(id);
         setChanged();
         notifyObservers(id);
     }
@@ -65,9 +80,11 @@ public class OrderHeader extends Observable{
         return "ID Zamowienia: " + getId();
     }
 
-    public void addOrderDetail() {
-        OrderDetail orderHeader = new OrderDetail(getNextId(),this.getId());
-        orderDetailList.add(orderHeader);
+    public void addOrderDetail() throws SQLException, ClassNotFoundException {
+        OrderDetailDAO orderDetailDao = new OrderDetailDAOImpl();
+        OrderDetail orderDetail = new OrderDetail(getNextId(),getId());
+        orderDetailList.add(orderDetail);
+        orderDetailDao.addOrderDetail(orderDetail);
         setChanged();
         notifyObservers();
     }
@@ -76,7 +93,9 @@ public class OrderHeader extends Observable{
         return orderDetailList.size();
     }
 
-    public void removeOrderDetail(int arg) {
-        orderDetailList.remove(arg);
+    public void removeOrderDetail(int arg) throws SQLException, ClassNotFoundException {
+        OrderDetailDAO orderDetailDao = new OrderDetailDAOImpl();
+        OrderDetail orderDetail = orderDetailList.remove(arg);
+        orderDetailDao.removeOrderDetail(orderDetail.getOrderHeaderID(), orderDetail.getId());
     }
 }

@@ -6,6 +6,7 @@ import com.company.Model.OrderHeader;
 import com.company.View.OrderDetailView;
 import com.company.View.OrderView;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +24,7 @@ public class OrderHeaderController {
     }
 
 
-    public boolean execute(String command) {
+    public boolean execute(String command) throws SQLException, ClassNotFoundException {
         if ("change date".equals(command)) {
             changeOrderDate();
             return true;
@@ -69,21 +70,21 @@ public class OrderHeaderController {
 
 
     private void changeOrderDate() {
-        //Pobrac od uzytkownika date
-//        LocalDate date = now();
-//        model.setOrderDate(date);
+//        Pobrac od uzytkownika date
+        LocalDate date = now();
+        model.setOrderDate(date);
 
-        Scanner inputReg = new Scanner(System.in);
-
-        System.out.print("Enter Date of Birth (DD/MM/YYYY): ");
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        LocalDate date = null;
-        date = LocalDate.parse(inputReg.nextLine(), formatter);
-        
-        System.out.println(date);
-        inputReg.close();
+//        Scanner inputReg = new Scanner(System.in);
+//
+//        System.out.print("Enter Date of Birth (DD/MM/YYYY): ");
+//
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//
+//        LocalDate date = null;
+//        date = LocalDate.parse(inputReg.nextLine(), formatter);
+//
+//        System.out.println(date);
+//        inputReg.close();
     }
 
     public static boolean isInteger(String s) {

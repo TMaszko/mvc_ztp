@@ -3,6 +3,7 @@ package com.company.Controller;
 import com.company.Model.OrderDetail;
 import com.company.View.OrderDetailView;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class OrderDetailController {
@@ -18,7 +19,7 @@ public class OrderDetailController {
         this.view = orderView;
     }
 
-    public boolean execute(String command) {
+    public boolean execute(String command) throws SQLException, ClassNotFoundException {
         if ("change name".equals(command)) {
             changeName();
             return true;
@@ -40,6 +41,10 @@ public class OrderDetailController {
             System.out.println("Podaj cene: ");
             price = scanner.nextLine();
             model.setPrice(Float.parseFloat(price));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -49,6 +54,10 @@ public class OrderDetailController {
             System.out.println("Podaj nazwe produktu: ");
             name = scanner.nextLine();
             model.setProductName(name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
